@@ -1,10 +1,10 @@
 import axios from "axios";
 
 let BASE_URL;
-if (process.env.NODE_ENV !== "development") {
-  BASE_URL = "https://mernventory.cyclic.app/api";
-} else {
+if (process.env.NODE_ENV === "development") {
   BASE_URL = "http://localhost:5000/api";
+} else {
+  BASE_URL = "https://mernventory.cyclic.app/api";
 }
 
 export default axios.create({
