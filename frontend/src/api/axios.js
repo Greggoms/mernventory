@@ -2,7 +2,7 @@ import axios from "axios";
 
 let BASE_URL;
 if (process.env.NODE_ENV !== "development") {
-  BASE_URL = process.env.REACT_APP_BASE_URL;
+  BASE_URL = "https://mernventory.cyclic.app/api";
 } else {
   BASE_URL = "http://localhost:5000/api";
 }
