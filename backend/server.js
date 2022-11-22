@@ -24,13 +24,11 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/refresh", require("./routes/refresh"));
 app.use("/api/logout", require("./routes/logout"));
 
-// put protected routes underneath this
-app.use(verifyJWT);
-app.use("/api/register", require("./routes/register"));
-app.use("/api/users", require("./routes/users"));
-app.use("/api/shops", require("./routes/shops"));
-app.use("/api/categories", require("./routes/categories"));
-app.use("/api/products", require("./routes/products"));
+app.use("/api/register", verifyJWT, require("./routes/register"));
+app.use("/api/users", verifyJWT, require("./routes/users"));
+app.use("/api/shops", verifyJWT, require("./routes/shops"));
+app.use("/api/categories", verifyJWT, require("./routes/categories"));
+app.use("/api/products", verifyJWT, require("./routes/products"));
 
 // Serve frontend for production
 if (process.env.NODE_ENV === "production") {
@@ -38,11 +36,17 @@ if (process.env.NODE_ENV === "production") {
 
   app.get("*", (req, res) =>
     res.sendFile(
-      path.resolve(__dirname, "../", "frontend", "build", "index.html")
+      path.resolve(__dirname, "../", "frontend", "build", "index.html"),
+      (err) => {
+        if (err) {
+          res.send(`
+          <h1>Something went wrong</h1>
+          <h3>Make sure the frontend build folder exists.</h3>
+          <p>${err}</p>`);
+        }
+      }
     )
   );
-} else {
-  app.get("/", (req, res) => res.send("Please set to production"));
 }
 
 const PORT = process.env.PORT || 5000;
