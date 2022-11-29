@@ -236,7 +236,6 @@ const Home = () => {
           No results. Try another search.
         </Typography>
       )}
-
       <MuiDataGrid
         data={products}
         toShopData={toShopData}

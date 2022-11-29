@@ -2,7 +2,27 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { Box } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "@mui/material";
+import { Link, styled } from "@mui/material";
+
+// Sticky DataGrid Header with autoHeight prop set to true
+// https://stackoverflow.com/a/71244913/11205784
+const StickyDataGrid = styled(DataGrid)(({ theme }) => ({
+  "& .MuiDataGrid-columnHeaders": {
+    position: "sticky",
+    // Replace background colour if necessary
+    backgroundColor: theme.palette.background.paper,
+    // Display header above grid data, but below any popups
+    zIndex: theme.zIndex.mobileStepper - 1,
+  },
+  "& .MuiDataGrid-virtualScroller": {
+    // Undo the margins that were added to push the rows below the previously fixed header
+    marginTop: "0 !important",
+  },
+  "& .MuiDataGrid-main": {
+    // Not sure why it is hidden by default, but it prevented the header from sticking
+    overflow: "visible",
+  },
+}));
 
 const MuiDataGrid = (props) => {
   const [selectedPageSize, setSelectedPageSize] = useState(10);
@@ -69,7 +89,8 @@ const MuiDataGrid = (props) => {
     {
       headerName: "Description",
       field: "description",
-      flex: 1,
+      minWidth: 500,
+      maxWidth: 600,
     },
     {
       headerName:
@@ -77,6 +98,7 @@ const MuiDataGrid = (props) => {
           ? `Qty - ${props.toShopData[0].shopName}`
           : "Qty - You",
       field: "toShopQOH",
+      minWidth: 225,
     },
     {
       headerName:
@@ -84,6 +106,7 @@ const MuiDataGrid = (props) => {
           ? `Qty - ${props.fromShopData[0].shopName}`
           : "Qty - Them",
       field: "fromShopQOH",
+      minWidth: 225,
     },
     {
       headerName: "Reorder Point",
@@ -116,14 +139,17 @@ const MuiDataGrid = (props) => {
     {
       field: "createdAt",
       headerName: "Created",
+      minWidth: 150,
     },
     {
       field: "modifiedAt",
       headerName: "Modified",
+      minWidth: 150,
     },
     {
       field: "shopTimestamp",
       headerName: "Shop",
+      minWidth: 150,
     },
   ];
 
@@ -152,8 +178,8 @@ const MuiDataGrid = (props) => {
   ];
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <DataGrid
+    <Box sx={{ width: "100%", pb: 10 }}>
+      <StickyDataGrid
         rows={rows}
         columns={columns}
         autoHeight={true}
@@ -167,6 +193,7 @@ const MuiDataGrid = (props) => {
         initialState={{
           columns: {
             columnVisibilityModel: {
+              index: false,
               itemID: false,
               priceRetail: false,
               priceMSRP: false,

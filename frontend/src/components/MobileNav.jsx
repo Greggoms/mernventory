@@ -9,7 +9,10 @@ const MobileNav = () => {
   return (
     <Box>
       <Button
-        variant="contained"
+        variant="text"
+        sx={{
+          color: "text.primary",
+        }}
         disableElevation={true}
         startIcon={<MenuIcon />}
         onClick={() => setIsOpen((prev) => !prev)}
