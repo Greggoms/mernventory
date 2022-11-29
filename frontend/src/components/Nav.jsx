@@ -1,9 +1,20 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useLogout from "../hooks/useLogout";
-import { NavContainer } from "../css";
+import { useThemeMode } from "../context/ThemeContext";
+import {
+  Stack,
+  Button,
+  Tooltip,
+  Link,
+  FormControlLabel,
+  Switch,
+} from "@mui/material";
 
-const Nav = () => {
+// isMobile is defined in MobileNav.jsx
+const Nav = ({ isMobile, setIsOpen }) => {
+  const { darkMode, handleDarkMode } = useThemeMode();
+
   const { auth } = useAuth();
   const navigate = useNavigate();
   const logout = useLogout();
@@ -13,23 +24,54 @@ const Nav = () => {
     navigate("/login");
   };
   return (
-    <NavContainer>
-      <ul>
+    <>
+      <Stack
+        direction={isMobile ? "column" : "row"}
+        spacing={2}
+        alignItems={isMobile ? "flex-start" : "center"}
+      >
         {auth.accessToken && (
           <>
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-            <li>
-              <Link to="/admin">Admin</Link>
-            </li>
-            <li>
-              <button onClick={signOut}>Logout</button>
-            </li>
+            <Link
+              component={RouterLink}
+              to="/profile"
+              sx={{ color: "text.primary" }}
+              onClick={() => isMobile && setIsOpen(false)}
+            >
+              Profile
+            </Link>
+            <Link
+              component={RouterLink}
+              to="/admin"
+              sx={{ color: "text.primary" }}
+              onClick={() => isMobile && setIsOpen(false)}
+            >
+              Admin
+            </Link>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                signOut();
+                isMobile && setIsOpen(false);
+              }}
+            >
+              Logout
+            </Button>
           </>
         )}
-      </ul>
-    </NavContainer>
+        {/* Toggle dark theme component */}
+        <Tooltip title="Toggle dark mode">
+          <FormControlLabel
+            sx={isMobile ? { marginTop: "3rem" } : { marginTop: 0 }}
+            control={
+              <Switch checked={darkMode} onClick={() => handleDarkMode()} />
+            }
+            label={darkMode ? "Dark Mode" : "Light Mode"}
+          />
+        </Tooltip>
+      </Stack>
+    </>
   );
 };
 

@@ -6,7 +6,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { TableContainer, ColumnVisibilityContainer } from "../css";
 
 function ReactTableV8(props) {
   const [sorting, setSorting] = useState([]);
@@ -204,44 +203,42 @@ function ReactTableV8(props) {
 
   return (
     <>
-      <ColumnVisibilityContainer>
-        <h3>Show/Hide Columns</h3>
-        <div className="label-list">
-          <label className="toggle-all">
-            <input
-              {...{
-                type: "checkbox",
-                checked: table.getIsAllColumnsVisible(),
-                onChange: table.getToggleAllColumnsVisibilityHandler(),
-              }}
-            />{" "}
-            <p>Toggle All</p>
-          </label>
-          {table.getAllLeafColumns().map((column) => {
-            return (
-              <label
-                key={column.id}
-                style={
-                  column.getIsVisible()
-                    ? checkedStyles.active
-                    : checkedStyles.inactive
-                }
-              >
-                <input
-                  {...{
-                    type: "checkbox",
-                    checked: column.getIsVisible(),
-                    onChange: column.getToggleVisibilityHandler(),
-                  }}
-                />{" "}
-                <p>{column.id}</p>
-              </label>
-            );
-          })}
-        </div>
-      </ColumnVisibilityContainer>
+      <h3>Show/Hide Columns</h3>
+      <div className="label-list">
+        <label className="toggle-all">
+          <input
+            {...{
+              type: "checkbox",
+              checked: table.getIsAllColumnsVisible(),
+              onChange: table.getToggleAllColumnsVisibilityHandler(),
+            }}
+          />{" "}
+          <p>Toggle All</p>
+        </label>
+        {table.getAllLeafColumns().map((column) => {
+          return (
+            <label
+              key={column.id}
+              style={
+                column.getIsVisible()
+                  ? checkedStyles.active
+                  : checkedStyles.inactive
+              }
+            >
+              <input
+                {...{
+                  type: "checkbox",
+                  checked: column.getIsVisible(),
+                  onChange: column.getToggleVisibilityHandler(),
+                }}
+              />{" "}
+              <p>{column.id}</p>
+            </label>
+          );
+        })}
+      </div>
 
-      <TableContainer>
+      <table>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -303,7 +300,7 @@ function ReactTableV8(props) {
             );
           })}
         </tbody>
-      </TableContainer>
+      </table>
     </>
   );
 }

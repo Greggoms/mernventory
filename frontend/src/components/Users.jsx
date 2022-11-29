@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Box, Stack, Typography } from "@mui/material";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -35,18 +36,20 @@ const Users = () => {
   }, [axiosPrivate, location, navigate]);
 
   return (
-    <article>
-      <h3>Users List</h3>
+    <Box>
+      <Typography variant="h5">Users List</Typography>
       {users?.length ? (
-        <ol style={{ marginLeft: "1rem" }}>
+        <Stack component="ol" style={{ marginLeft: "1rem" }}>
           {users.map((user, index) => (
-            <li key={index}>{user}</li>
+            <Typography component="li" key={index}>
+              {user}
+            </Typography>
           ))}
-        </ol>
+        </Stack>
       ) : (
-        <p>No users to display</p>
+        <Typography>No users to display</Typography>
       )}
-    </article>
+    </Box>
   );
 };
 

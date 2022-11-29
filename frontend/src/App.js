@@ -1,17 +1,18 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import RequireAuth from "./components/RequireAuth";
-import PersistLogin from "./components/PersistLogin";
-import Admin from "./pages/Admin";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import NotFoundPage from "./pages/NotFoundPage";
-import Unauthorized from "./pages/Unauthorized";
+import RequireAuth from "./utils/RequireAuth";
+import PersistLogin from "./pages/Auth/PersistLogin";
+import Admin from "./pages/Admin/Admin";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Auth/Login";
+import Profile from "./pages/Profile/Profile";
+import NotFoundPage from "./pages/NotFound/NotFound";
+import Unauthorized from "./pages/Unauthorized/Unauthorized";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { theme } from "./css/theme";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { useMemo } from "react";
+import { useThemeMode } from "./context/ThemeContext";
 
 const ROLES = {
   User: 2001,
@@ -19,11 +20,17 @@ const ROLES = {
 };
 
 function App() {
+  const { darkMode } = useThemeMode();
+  let theme = useMemo(() => {
+    return createTheme({ palette: { mode: darkMode ? "dark" : "light" } });
+  }, [darkMode]);
+
   return (
     <>
-      <ToastContainer />
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
+        <CssBaseline />
+
+        <ToastContainer />
         <Routes>
           <Route path="/" element={<Layout />}>
             {/* public routes */}
@@ -53,48 +60,3 @@ function App() {
 }
 
 export default App;
-
-const GlobalStyle = createGlobalStyle`
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Streches main content to keep footer at the bottom. */
-html,
-body,
-#root,
-main {
-  height: 100%;
-}
-
-html {
-  /* background-color: ${theme.grayscaleDarkest}; */
-  background-size: cover;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  font: 112.5%/1.45em;
-}
-
-@media only screen and (max-width: 480px) {
-  html {
-    font-size: 100%;
-  }
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  font-weight: normal;
-  word-wrap: break-word;
-  font-kerning: normal;
-  font-feature-settings: "kern", "liga", "clig", "calt";
-  -webkit-font-smoothing: antialiased;
-  -webkit-font-feature-settings: "kern", "liga", "clig", "calt";
-  -moz-osx-font-smoothing: grayscale;
-  -moz-font-feature-settings: "kern", "liga", "clig", "calt";
-  -ms-font-feature-settings: "kern", "liga", "clig", "calt";
-}
-`;

@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { pickBy } from "lodash";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { UpdateUserContainer } from "../css/updateUserSectionStyles";
+import { Button, Paper, TextField, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/system";
 
 const UPDATE_PROFILE_URL = "/users/me";
 
@@ -29,6 +30,7 @@ const UpdateUserForm = (props) => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    console.log(data);
     // https://github.com/react-hook-form/react-hook-form/issues/656#issuecomment-680674438
     // Strip out all values with empty strings
     const sanitizedValues = pickBy(data, (value) => value.length > 0);
@@ -45,75 +47,84 @@ const UpdateUserForm = (props) => {
     setIsSafeToReset(true);
   };
   return (
-    <UpdateUserContainer>
+    <Paper
+      sx={{
+        p: 3,
+        mt: 3,
+        width: "100%",
+        maxWidth: "35rem",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
+    >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h2>Update your account details</h2>
-        <div className="label-group">
-          <label htmlFor="name">New Name (first & last):</label>
-          <input
+        <Stack spacing={2}>
+          <Typography variant="h5">Update your account details</Typography>
+          <TextField
+            variant="outlined"
+            label="New Name"
+            id="name"
             placeholder={props.user.name}
             {...register("name")}
-            id="name"
-            type="text"
           />
-        </div>
-        <div className="label-group">
-          <label htmlFor="email">New Email:</label>
-          <input
-            placeholder={props.user.email}
-            {...register("email")}
+          <TextField
+            variant="outlined"
+            label="New Email"
             id="email"
             type="email"
+            placeholder={props.user.email}
+            {...register("email")}
           />
-        </div>
-        <div className="label-group">
-          <label htmlFor="password">New Password:</label>
-          <input
+          <TextField
+            variant="outlined"
+            label="New Password"
             type="password"
             id="password"
             name="password"
             {...register("password")}
             placeholder="Enter password"
           />
-        </div>
-        <div className="label-group">
-          <label htmlFor="passwordConfirm">Confirm New Password:</label>
-          <input
+
+          <TextField
+            variant="outlined"
+            label="Confirm New Password"
             type="password"
             id="passwordConfirm"
             name="passwordConfirm"
+            placeholder="Confirm password"
             {...register("passwordConfirm", {
               validate: {
                 emailEqual: (value) => value === getValues().password,
               },
             })}
-            placeholder="Confirm password"
           />
           {errors.passwordConfirm && (
-            <span className="form-error">Passwords do not match</span>
+            <Typography color="error.main">Passwords do not match</Typography>
           )}
-        </div>
 
-        <button>Submit Updates</button>
+          <Button type="submit" variant="contained">
+            Submit Updates
+          </Button>
+        </Stack>
       </form>
 
-      <section>
-        <h3>Notice:</h3>
-        <ul>
-          <li>
+      <Box mt={3}>
+        <Typography variant="h4">Notice:</Typography>
+        <Stack>
+          <Typography component="li">
             All fields are optional. Fill in the fields you would like to
             update.
-          </li>
-          <li>
+          </Typography>
+          <Typography component="li">
             You may be required to sign in again after updating your email.
-          </li>
-          <li>
+          </Typography>
+          <Typography component="li">
             If you are updating your password, you must confirm the new password
             to ensure they match.
-          </li>
-        </ul>
-      </section>
-    </UpdateUserContainer>
+          </Typography>
+        </Stack>
+      </Box>
+    </Paper>
   );
 };
 
