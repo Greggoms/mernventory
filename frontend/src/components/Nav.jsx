@@ -9,6 +9,7 @@ import {
   Link,
   FormControlLabel,
   Switch,
+  Typography,
 } from "@mui/material";
 
 // isMobile is defined in MobileNav.jsx
@@ -32,22 +33,28 @@ const Nav = ({ isMobile, setIsOpen }) => {
       >
         {auth.accessToken && (
           <>
-            <Link
-              component={RouterLink}
-              to="/profile"
-              sx={{ color: "text.primary" }}
-              onClick={() => isMobile && setIsOpen(false)}
-            >
-              Profile
-            </Link>
-            <Link
-              component={RouterLink}
-              to="/admin"
-              sx={{ color: "text.primary" }}
-              onClick={() => isMobile && setIsOpen(false)}
-            >
-              Admin
-            </Link>
+            <Typography>
+              <Link
+                component={RouterLink}
+                to="/profile"
+                color="inherit"
+                underline="hover"
+                onClick={() => isMobile && setIsOpen(false)}
+              >
+                Profile
+              </Link>
+            </Typography>
+            <Typography>
+              <Link
+                component={RouterLink}
+                to="/admin"
+                color="inherit"
+                underline="hover"
+                onClick={() => isMobile && setIsOpen(false)}
+              >
+                Admin
+              </Link>
+            </Typography>
             <Button
               variant="contained"
               color="secondary"

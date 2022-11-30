@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { Box } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link, styled } from "@mui/material";
+import { Link, Paper, styled } from "@mui/material";
 
 // Sticky DataGrid Header with autoHeight prop set to true
 // https://stackoverflow.com/a/71244913/11205784
@@ -178,7 +177,7 @@ const MuiDataGrid = (props) => {
   ];
 
   return (
-    <Box sx={{ width: "100%", pb: 10 }}>
+    <Paper sx={{ width: "100%" }}>
       <StickyDataGrid
         rows={rows}
         columns={columns}
@@ -207,7 +206,7 @@ const MuiDataGrid = (props) => {
           },
         }}
       />
-    </Box>
+    </Paper>
   );
 };
 

@@ -1,24 +1,32 @@
 import { useState } from "react";
 import Nav from "./Nav";
-import { Box } from "@mui/system";
-import { Button, Drawer } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Button from "@mui/material/Button";
+import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const MobileNav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const isExtraSmall = useMediaQuery("(max-width:350px)");
+
   return (
-    <Box>
-      <Button
-        variant="text"
-        sx={{
-          color: "text.primary",
-        }}
-        disableElevation={true}
-        startIcon={<MenuIcon />}
-        onClick={() => setIsOpen((prev) => !prev)}
-      >
-        {isOpen ? "Close" : "Menu"}
-      </Button>
+    <>
+      {isExtraSmall ? (
+        <MenuIcon
+          onClick={() => setIsOpen((prev) => !prev)}
+          sx={{ cursor: "pointer" }}
+        />
+      ) : (
+        <Button
+          variant="text"
+          color="inherit"
+          disableElevation={true}
+          startIcon={<MenuIcon />}
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          {isOpen ? "Close" : "Menu"}
+        </Button>
+      )}
       <Drawer
         anchor="right"
         open={isOpen}
@@ -32,7 +40,7 @@ const MobileNav = () => {
       >
         <Nav isMobile={true} setIsOpen={setIsOpen} />
       </Drawer>
-    </Box>
+    </>
   );
 };
 
